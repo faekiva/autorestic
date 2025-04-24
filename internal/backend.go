@@ -129,7 +129,7 @@ func (b Backend) validate() error {
 	if err != nil {
 		return err
 	}
-	options := ExecuteOptions{Envs: env, Silent: true}
+	options := ExecuteOptions{Envs: env, Silent: false}
 	// Check if already initialized
 	cmd := []string{"check"}
 	cmd = append(cmd, combineBackendOptions("check", b)...)
@@ -138,7 +138,6 @@ func (b Backend) validate() error {
 		return nil
 	} else {
 		// If not initialize
-		options.Silent = false
 		colors.Body.Printf("Initializing backend \"%s\"...\n", b.name)
 		cmd := []string{"init"}
 		cmd = append(cmd, combineBackendOptions("init", b)...)
