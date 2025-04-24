@@ -138,6 +138,7 @@ func (b Backend) validate() error {
 		return nil
 	} else {
 		// If not initialize
+		options.Silent = false
 		colors.Body.Printf("Initializing backend \"%s\"...\n", b.name)
 		cmd := []string{"init"}
 		cmd = append(cmd, combineBackendOptions("init", b)...)
