@@ -53,7 +53,7 @@ func ExecuteCommand(options ExecuteOptions, args ...string) (int, string, error)
 	}
 
 	var out bytes.Buffer
-	var error bytes.Buffer
+	var errorBuffer bytes.Buffer
 	if flags.VERBOSE && !options.Silent {
 		var colored ColoredWriter = ColoredWriter{
 			target: os.Stdout,
@@ -64,14 +64,15 @@ func ExecuteCommand(options ExecuteOptions, args ...string) (int, string, error)
 	} else {
 		cmd.Stdout = &out
 	}
-	cmd.Stderr = &error
+	cmd.Stderr = &errorBuffer
 	err := cmd.Run()
 	if err != nil {
 		code := -1
 		if exitError, ok := err.(*exec.ExitError); ok {
 			code = exitError.ExitCode()
 		}
-		return code, error.String(), err
+		fmt.Fprint(os.Stderr, errorBuffer.String())
+		return code, errorBuffer.String(), err
 	}
 	return 0, out.String(), nil
 }
